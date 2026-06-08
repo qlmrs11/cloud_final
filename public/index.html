@@ -6,34 +6,40 @@
   <title>Kelompok 4 Helpdesk App</title>
   <style>
     :root {
-      --bg: #f4f7fb;
+      --bg: #eef3f8;
       --surface: #ffffff;
-      --surface-soft: #eef4ff;
+      --surface-2: #f8fafc;
       --text: #172033;
       --muted: #667085;
-      --line: #d9e2ef;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --success: #16803f;
-      --warning: #b45309;
-      --danger: #dc2626;
+      --line: #d7e0ea;
+      --primary: #1f5eff;
+      --primary-dark: #1746c7;
+      --cyan: #0891b2;
+      --green: #16803f;
+      --amber: #b45309;
+      --red: #d92d20;
+      --ink: #101828;
       --radius: 8px;
-      --shadow: 0 18px 45px rgba(23, 32, 51, 0.11);
+      --shadow: 0 16px 45px rgba(16, 24, 40, 0.12);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
     body {
+      min-height: 100vh;
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
       color: var(--text);
       background:
-        linear-gradient(135deg, rgba(37, 99, 235, 0.08), transparent 35%),
-        linear-gradient(315deg, rgba(22, 128, 63, 0.08), transparent 30%),
-        var(--bg);
-      min-height: 100vh;
+        radial-gradient(circle at top left, rgba(31, 94, 255, 0.10), transparent 28rem),
+        linear-gradient(145deg, #f8fbff 0%, #eef3f8 54%, #e9f4f2 100%);
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     button,
@@ -45,72 +51,143 @@
 
     button {
       border: 0;
-      border-radius: 6px;
       cursor: pointer;
-      font-weight: 700;
-      transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
     }
 
     button:disabled {
       cursor: not-allowed;
-      opacity: 0.65;
-      transform: none;
+      opacity: 0.62;
     }
 
-    .app-shell {
-      width: min(1160px, calc(100% - 32px));
+    .hidden {
+      display: none !important;
+    }
+
+    .auth-view {
+      width: min(1120px, calc(100% - 32px));
+      min-height: 100vh;
       margin: 0 auto;
-      padding: 28px 0 44px;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
       align-items: center;
-      gap: 16px;
-      padding: 22px 0 28px;
+      gap: 28px;
+      padding: 36px 0;
     }
 
-    .brand h1 {
-      margin: 0 0 8px;
-      font-size: clamp(28px, 4vw, 44px);
+    .auth-hero {
+      min-height: 560px;
+      color: #ffffff;
+      background:
+        linear-gradient(145deg, rgba(16, 24, 40, 0.82), rgba(31, 94, 255, 0.70)),
+        linear-gradient(135deg, #101828, #1f5eff);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(28px, 5vw, 52px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .auth-hero::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      bottom: -80px;
+      width: 310px;
+      height: 310px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 50%;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      font-weight: 900;
       letter-spacing: 0;
     }
 
-    .brand p {
+    .auth-hero h1 {
+      width: min(640px, 100%);
+      margin: 24px 0 10px;
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .auth-hero p {
       margin: 0;
-      color: var(--muted);
-      font-size: 16px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .hero-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 34px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-stat {
+      padding: 16px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.20);
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat span {
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 13px;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.94);
-      border: 1px solid rgba(217, 226, 239, 0.9);
+      background: var(--surface);
+      border: 1px solid rgba(215, 224, 234, 0.92);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
 
-    .auth-grid {
+    .auth-card {
+      padding: 24px;
+    }
+
+    .tabs {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-      align-items: start;
+      padding: 4px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
     }
 
-    .auth-card,
-    .panel {
-      padding: 22px;
+    .tab-btn {
+      min-height: 42px;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 800;
     }
 
-    .auth-card h2,
-    .panel h2,
-    .panel h3 {
-      margin: 0 0 16px;
-      font-size: 22px;
+    .tab-btn.active {
+      color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 8px 18px rgba(31, 94, 255, 0.12);
     }
 
     .form-grid {
@@ -118,23 +195,15 @@
       gap: 14px;
     }
 
-    .ticket-form {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .field {
       display: grid;
       gap: 7px;
     }
 
-    .field.full {
-      grid-column: 1 / -1;
-    }
-
     label {
       color: #344054;
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 800;
     }
 
     input,
@@ -143,14 +212,14 @@
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: #fff;
+      background: #ffffff;
       color: var(--text);
       padding: 11px 12px;
       outline: none;
     }
 
     textarea {
-      min-height: 104px;
+      min-height: 112px;
       resize: vertical;
     }
 
@@ -158,35 +227,57 @@
     select:focus,
     textarea:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+      box-shadow: 0 0 0 3px rgba(31, 94, 255, 0.13);
     }
 
     .btn {
+      display: inline-flex;
       min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       padding: 10px 14px;
+      border-radius: 6px;
+      color: #ffffff;
       background: var(--primary);
-      color: #fff;
+      font-weight: 900;
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
     }
 
     .btn:hover {
       background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(31, 94, 255, 0.18);
     }
 
     .btn.secondary {
-      background: #e7edf8;
       color: #22314d;
+      background: #e8eef8;
     }
 
     .btn.secondary:hover {
-      background: #d9e4f5;
+      background: #dbe5f4;
+      box-shadow: none;
+    }
+
+    .btn.ghost {
+      color: var(--primary);
+      background: transparent;
+      border: 1px solid rgba(31, 94, 255, 0.24);
+    }
+
+    .btn.ghost:hover {
+      background: rgba(31, 94, 255, 0.08);
+      box-shadow: none;
     }
 
     .btn.danger {
-      background: var(--danger);
+      background: var(--red);
     }
 
     .btn.danger:hover {
-      background: #b91c1c;
+      background: #b42318;
+      box-shadow: 0 10px 22px rgba(217, 45, 32, 0.18);
     }
 
     .btn.small {
@@ -201,7 +292,7 @@
       border-radius: 6px;
       padding: 11px 12px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .message.show {
@@ -220,267 +311,726 @@
       border: 1px solid #fecaca;
     }
 
-    .dashboard {
-      display: none;
-      gap: 20px;
-    }
-
-    .dashboard.active,
-    .auth-section.active {
+    .app-view {
+      min-height: 100vh;
       display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
     }
 
-    .auth-section {
-      display: none;
+    .sidebar {
+      padding: 22px;
+      color: #ffffff;
+      background: #111827;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
     }
 
-    .dashboard-header {
+    .sidebar-brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .sidebar-brand h2 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    .sidebar-brand p {
+      margin: 4px 0 0;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 12px;
+    }
+
+    .side-panel {
+      padding: 16px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .side-panel small {
+      color: rgba(255, 255, 255, 0.60);
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .side-panel strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 18px;
+    }
+
+    .side-nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .side-nav button {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 12px;
+      text-align: left;
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.78);
+      background: transparent;
+      font-weight: 800;
+    }
+
+    .side-nav button.active,
+    .side-nav button:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .main {
+      min-width: 0;
+      padding: 24px;
+    }
+
+    .topbar {
       display: flex;
       justify-content: space-between;
-      gap: 16px;
       align-items: center;
-      padding: 18px 20px;
+      gap: 16px;
+      margin-bottom: 18px;
     }
 
-    .user-info {
+    .page-title h1 {
+      margin: 0 0 6px;
+      color: var(--ink);
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: 0;
+    }
+
+    .page-title p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .user-chip {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.76);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      font-weight: 900;
+    }
+
+    .user-chip strong {
+      display: block;
+      line-height: 1.1;
+    }
+
+    .user-chip span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 390px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card {
+      padding: 16px;
+      border-radius: var(--radius);
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 26px rgba(16, 24, 40, 0.06);
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .stat-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 30px;
+      color: var(--ink);
+    }
+
+    .stat-card.total {
+      border-top: 4px solid var(--primary);
+    }
+
+    .stat-card.open {
+      border-top: 4px solid var(--cyan);
+    }
+
+    .stat-card.process {
+      border-top: 4px solid var(--amber);
+    }
+
+    .stat-card.done {
+      border-top: 4px solid var(--green);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .panel-header h2,
+    .panel-header h3 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 18px;
+    }
+
+    .panel-header p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .create-panel {
+      margin-bottom: 18px;
+    }
+
+    .ticket-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) 150px 150px auto;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .ticket-list {
+      display: grid;
       gap: 10px;
     }
 
-    .user-info strong {
-      font-size: 18px;
+    .ticket-card {
+      width: 100%;
+      padding: 0;
+      text-align: left;
+      border-radius: var(--radius);
+      color: inherit;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      transition: border 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+    }
+
+    .ticket-card:hover,
+    .ticket-card.active {
+      border-color: rgba(31, 94, 255, 0.52);
+      box-shadow: 0 12px 28px rgba(31, 94, 255, 0.11);
+      transform: translateY(-1px);
+    }
+
+    .ticket-inner {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .ticket-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .ticket-title {
+      margin: 0 0 6px;
+      font-size: 16px;
+      color: var(--ink);
+    }
+
+    .ticket-desc {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
     }
 
     .badge {
       display: inline-flex;
+      min-height: 25px;
       align-items: center;
       justify-content: center;
-      min-height: 26px;
+      padding: 4px 9px;
       border-radius: 999px;
-      padding: 4px 10px;
+      border: 1px solid transparent;
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
       text-transform: uppercase;
       white-space: nowrap;
     }
 
-    .badge.role-admin {
+    .role-admin {
       color: #7c2d12;
       background: #ffedd5;
+      border-color: #fed7aa;
     }
 
-    .badge.role-user {
+    .role-user {
       color: #1e3a8a;
       background: #dbeafe;
+      border-color: #bfdbfe;
     }
 
-    .badge.status-open {
-      color: #1e3a8a;
-      background: #dbeafe;
+    .status-open {
+      color: #155e75;
+      background: #cffafe;
+      border-color: #a5f3fc;
     }
 
-    .badge.status-process {
+    .status-process {
       color: #7c2d12;
       background: #ffedd5;
+      border-color: #fed7aa;
     }
 
-    .badge.status-done {
+    .status-done {
       color: #14532d;
       background: #dcfce7;
+      border-color: #bbf7d0;
     }
 
-    .badge.priority-low {
-      color: #14532d;
-      background: #dcfce7;
+    .priority-low {
+      color: #166534;
+      background: #f0fdf4;
+      border-color: #bbf7d0;
     }
 
-    .badge.priority-medium {
-      color: #713f12;
-      background: #fef3c7;
+    .priority-medium {
+      color: #854d0e;
+      background: #fefce8;
+      border-color: #fde68a;
     }
 
-    .badge.priority-high {
-      color: #7f1d1d;
-      background: #fee2e2;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-    }
-
-    table {
-      width: 100%;
-      min-width: 900px;
-      border-collapse: collapse;
-      background: #fff;
-    }
-
-    th,
-    td {
-      padding: 13px 14px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      background: var(--surface-soft);
-      color: #344054;
-      font-size: 13px;
-      text-transform: uppercase;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .ticket-title {
-      font-weight: 800;
-      margin-bottom: 5px;
-    }
-
-    .ticket-desc {
-      color: var(--muted);
-      max-width: 320px;
-      line-height: 1.45;
-    }
-
-    .table-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      min-width: 220px;
-    }
-
-    .inline-select {
-      width: auto;
-      min-width: 102px;
-      padding: 7px 9px;
-      font-size: 13px;
+    .priority-high {
+      color: #991b1b;
+      background: #fef2f2;
+      border-color: #fecaca;
     }
 
     .empty-state {
-      padding: 26px;
+      padding: 34px 18px;
       text-align: center;
       color: var(--muted);
-      border: 1px dashed var(--line);
       border-radius: var(--radius);
-      background: #fff;
+      border: 1px dashed var(--line);
+      background: #ffffff;
     }
 
-    .hidden {
-      display: none !important;
+    .detail-card {
+      position: sticky;
+      top: 18px;
+    }
+
+    .detail-body {
+      display: grid;
+      gap: 16px;
+    }
+
+    .detail-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .detail-desc {
+      margin: 0;
+      color: #344054;
+      line-height: 1.58;
+      white-space: pre-wrap;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .info-box {
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+    }
+
+    .info-box span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .info-box strong {
+      display: block;
+      color: var(--ink);
+      overflow-wrap: anywhere;
+    }
+
+    .admin-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: #f8fafc;
+      border: 1px solid var(--line);
+    }
+
+    .admin-form .btn {
+      grid-column: 1 / -1;
+    }
+
+    .comments {
+      display: grid;
+      gap: 10px;
+      max-height: 300px;
+      overflow: auto;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fafc;
+    }
+
+    .comment {
+      display: grid;
+      gap: 5px;
+      padding: 10px;
+      border-radius: var(--radius);
+      background: #ffffff;
+      border: 1px solid #edf2f7;
+    }
+
+    .comment.mine {
+      background: #eef4ff;
+      border-color: #c7d7fe;
+    }
+
+    .comment-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .comment p {
+      margin: 0;
+      color: #344054;
+      line-height: 1.45;
+      white-space: pre-wrap;
+    }
+
+    .comment-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 20;
+      max-width: min(420px, calc(100% - 36px));
+      padding: 13px 15px;
+      border-radius: var(--radius);
+      color: #ffffff;
+      background: #111827;
+      box-shadow: var(--shadow);
+      font-weight: 800;
+      transform: translateY(24px);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.22s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.error {
+      background: var(--red);
+    }
+
+    @media (max-width: 1080px) {
+      .auth-view,
+      .app-view {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-hero {
+        min-height: auto;
+      }
+
+      .sidebar {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .side-panel {
+        flex: 1 1 180px;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-card {
+        position: static;
+      }
     }
 
     @media (max-width: 760px) {
-      .app-shell {
-        width: min(100% - 20px, 1160px);
-        padding-top: 18px;
+      .auth-view {
+        width: min(100% - 20px, 1120px);
+        padding: 18px 0;
+      }
+
+      .auth-hero {
+        padding: 24px;
+      }
+
+      .hero-strip,
+      .stats-grid,
+      .ticket-form,
+      .info-grid,
+      .admin-form {
+        grid-template-columns: 1fr;
+      }
+
+      .main {
+        padding: 16px 10px 26px;
       }
 
       .topbar,
-      .dashboard-header {
+      .panel-header,
+      .ticket-line {
         align-items: flex-start;
         flex-direction: column;
       }
 
-      .auth-grid,
-      .ticket-form {
+      .toolbar {
         grid-template-columns: 1fr;
       }
 
-      .auth-card,
-      .panel {
-        padding: 18px;
-      }
-
-      .brand h1 {
-        font-size: 30px;
+      .user-chip,
+      .topbar .btn,
+      .toolbar .btn {
+        width: 100%;
       }
 
       .btn {
         width: 100%;
       }
 
-      .table-actions .btn {
-        width: auto;
+      .sidebar {
+        padding: 16px;
       }
     }
   </style>
 </head>
 <body>
-  <main class="app-shell">
-    <header class="topbar">
-      <div class="brand">
+  <section id="authView" class="auth-view">
+    <div class="auth-hero">
+      <div>
+        <div class="brand-mark">K4</div>
         <h1>Kelompok 4 Helpdesk App</h1>
-        <p>Demo Web</p>
+        <p>Cloudflare Pages + Functions + D1</p>
       </div>
-    </header>
-
-    <section id="authSection" class="auth-section active">
-      <div class="auth-grid">
-        <article class="card auth-card">
-          <h2>Login</h2>
-          <p id="loginMessage" class="message"></p>
-          <form id="loginForm" class="form-grid">
-            <div class="field">
-              <label for="loginEmail">Email</label>
-              <input id="loginEmail" type="email" autocomplete="email" placeholder="admin@mail.com" required>
-            </div>
-            <div class="field">
-              <label for="loginPassword">Password</label>
-              <input id="loginPassword" type="password" autocomplete="current-password" placeholder="admin123" required>
-            </div>
-            <button class="btn" type="submit">Login</button>
-          </form>
-        </article>
-
-        <article class="card auth-card">
-          <h2>Register User</h2>
-          <p id="registerMessage" class="message"></p>
-          <form id="registerForm" class="form-grid">
-            <div class="field">
-              <label for="registerName">Nama</label>
-              <input id="registerName" type="text" autocomplete="name" placeholder="Nama lengkap" required>
-            </div>
-            <div class="field">
-              <label for="registerEmail">Email</label>
-              <input id="registerEmail" type="email" autocomplete="email" placeholder="user@mail.com" required>
-            </div>
-            <div class="field">
-              <label for="registerPassword">Password</label>
-              <input id="registerPassword" type="password" autocomplete="new-password" placeholder="Minimal 1 karakter" required>
-            </div>
-            <button class="btn secondary" type="submit">Register</button>
-          </form>
-        </article>
-      </div>
-    </section>
-
-    <section id="dashboard" class="dashboard">
-      <div class="card dashboard-header">
-        <div class="user-info">
-          <strong id="welcomeText">Halo</strong>
-          <span id="roleBadge" class="badge">USER</span>
+      <div class="hero-strip">
+        <div class="hero-stat">
+          <strong>D1</strong>
+          <span>Database serverless</span>
         </div>
-        <button id="logoutBtn" class="btn secondary" type="button">Logout</button>
+        <div class="hero-stat">
+          <strong>Pages</strong>
+          <span>Frontend hosting</span>
+        </div>
+        <div class="hero-stat">
+          <strong>API</strong>
+          <span>Pages Functions</span>
+        </div>
+      </div>
+    </div>
+
+    <article class="card auth-card">
+      <div class="tabs">
+        <button id="loginTab" class="tab-btn active" type="button">Login</button>
+        <button id="registerTab" class="tab-btn" type="button">Register</button>
       </div>
 
-      <article id="ticketFormPanel" class="card panel">
-        <h2>Buat Ticket Baru</h2>
+      <div id="loginPane">
+        <p id="loginMessage" class="message"></p>
+        <form id="loginForm" class="form-grid">
+          <div class="field">
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" type="email" autocomplete="email" placeholder="admin@mail.com" required>
+          </div>
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" type="password" autocomplete="current-password" placeholder="admin123" required>
+          </div>
+          <button class="btn" type="submit">Login</button>
+          <button id="fillAdminBtn" class="btn ghost" type="button">Pakai Akun Admin Demo</button>
+        </form>
+      </div>
+
+      <div id="registerPane" class="hidden">
+        <p id="registerMessage" class="message"></p>
+        <form id="registerForm" class="form-grid">
+          <div class="field">
+            <label for="registerName">Nama</label>
+            <input id="registerName" type="text" autocomplete="name" placeholder="Nama lengkap" required>
+          </div>
+          <div class="field">
+            <label for="registerEmail">Email</label>
+            <input id="registerEmail" type="email" autocomplete="email" placeholder="user@mail.com" required>
+          </div>
+          <div class="field">
+            <label for="registerPassword">Password</label>
+            <input id="registerPassword" type="password" autocomplete="new-password" placeholder="Password demo" required>
+          </div>
+          <button class="btn" type="submit">Register & Login</button>
+        </form>
+      </div>
+    </article>
+  </section>
+
+  <section id="appView" class="app-view hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark">K4</div>
+        <div>
+          <h2>Kelompok 4 Helpdesk App</h2>
+          <p>Cloudflare Pages + D1</p>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <small>Masuk sebagai</small>
+        <strong id="sideUserName">-</strong>
+        <span id="sideRoleBadge" class="badge role-user">USER</span>
+      </div>
+
+      <nav class="side-nav">
+        <button class="active" type="button" data-filter-status="all">Semua Ticket</button>
+        <button type="button" data-filter-status="open">Open</button>
+        <button type="button" data-filter-status="process">Process</button>
+        <button type="button" data-filter-status="done">Done</button>
+      </nav>
+
+      <button id="logoutBtn" class="btn secondary" type="button">Logout</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="page-title">
+          <h1 id="dashboardTitle">Dashboard</h1>
+          <p id="dashboardSubtitle">Kelola ticket helpdesk.</p>
+        </div>
+        <div class="user-chip">
+          <div id="userAvatar" class="avatar">U</div>
+          <div>
+            <strong id="topUserName">User</strong>
+            <span id="topUserEmail">user@mail.com</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="stats-grid">
+        <div class="stat-card total">
+          <span>Total</span>
+          <strong id="statTotal">0</strong>
+        </div>
+        <div class="stat-card open">
+          <span>Open</span>
+          <strong id="statOpen">0</strong>
+        </div>
+        <div class="stat-card process">
+          <span>Process</span>
+          <strong id="statProcess">0</strong>
+        </div>
+        <div class="stat-card done">
+          <span>Done</span>
+          <strong id="statDone">0</strong>
+        </div>
+      </section>
+
+      <section id="createPanel" class="card panel create-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Buat Ticket Baru</h2>
+            <p>Ticket masuk dengan status open.</p>
+          </div>
+        </div>
         <p id="ticketMessage" class="message"></p>
-        <form id="ticketForm" class="form-grid ticket-form">
+        <form id="ticketForm" class="ticket-form">
           <div class="field">
             <label for="ticketTitle">Judul</label>
             <input id="ticketTitle" type="text" placeholder="Contoh: Website tidak bisa dibuka" required>
           </div>
           <div class="field">
             <label for="ticketCategory">Kategori</label>
-            <input id="ticketCategory" type="text" placeholder="Network, Server, Akun, Aplikasi" required>
+            <input id="ticketCategory" type="text" placeholder="Network, Server, Akun" required>
           </div>
           <div class="field">
             <label for="ticketPriority">Prioritas</label>
@@ -492,54 +1042,120 @@
           </div>
           <div class="field full">
             <label for="ticketDescription">Deskripsi</label>
-            <textarea id="ticketDescription" placeholder="Tulis keluhan atau detail masalah" required></textarea>
+            <textarea id="ticketDescription" placeholder="Tulis detail masalah" required></textarea>
           </div>
           <div class="field full">
             <button class="btn" type="submit">Tambah Ticket</button>
           </div>
         </form>
-      </article>
+      </section>
 
-      <article class="card panel">
-        <h2>Daftar Ticket</h2>
-        <p id="tableMessage" class="message"></p>
-        <div id="emptyState" class="empty-state hidden">Belum ada ticket.</div>
-        <div id="tableWrap" class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Ticket</th>
-                <th>Pemilik</th>
-                <th>Kategori</th>
-                <th>Prioritas</th>
-                <th>Status</th>
-                <th>Dibuat</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="ticketTableBody"></tbody>
-          </table>
-        </div>
-      </article>
-    </section>
-  </main>
+      <section class="dashboard-grid">
+        <article class="card panel">
+          <div class="panel-header">
+            <div>
+              <h2>Ticket Queue</h2>
+              <p id="ticketCountText">0 ticket</p>
+            </div>
+            <button id="refreshBtn" class="btn ghost small" type="button">Refresh</button>
+          </div>
+
+          <div class="toolbar">
+            <input id="searchInput" type="search" placeholder="Cari judul, kategori, pemilik">
+            <select id="statusFilter">
+              <option value="all">Semua Status</option>
+              <option value="open">Open</option>
+              <option value="process">Process</option>
+              <option value="done">Done</option>
+            </select>
+            <select id="priorityFilter">
+              <option value="all">Semua Prioritas</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+            <button id="clearFilterBtn" class="btn secondary small" type="button">Reset</button>
+          </div>
+
+          <p id="tableMessage" class="message"></p>
+          <div id="emptyState" class="empty-state hidden">Belum ada ticket.</div>
+          <div id="ticketList" class="ticket-list"></div>
+        </article>
+
+        <aside id="detailPanel" class="card panel detail-card">
+          <div class="empty-state">Pilih ticket untuk melihat detail.</div>
+        </aside>
+      </section>
+    </main>
+  </section>
+
+  <div id="toast" class="toast"></div>
 
   <script>
-    const authSection = document.getElementById("authSection");
-    const dashboard = document.getElementById("dashboard");
+    const storageKey = "helpdeskUser";
+    const statusLabels = {
+      open: "Open",
+      process: "Process",
+      done: "Done",
+    };
+    const priorityLabels = {
+      low: "Low",
+      medium: "Medium",
+      high: "High",
+    };
+
+    const state = {
+      user: JSON.parse(localStorage.getItem(storageKey)) || null,
+      tickets: [],
+      selectedTicket: null,
+      comments: [],
+      filters: {
+        search: "",
+        status: "all",
+        priority: "all",
+      },
+      loading: false,
+    };
+
+    const authView = document.getElementById("authView");
+    const appView = document.getElementById("appView");
+    const loginTab = document.getElementById("loginTab");
+    const registerTab = document.getElementById("registerTab");
+    const loginPane = document.getElementById("loginPane");
+    const registerPane = document.getElementById("registerPane");
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
     const ticketForm = document.getElementById("ticketForm");
     const logoutBtn = document.getElementById("logoutBtn");
-    const welcomeText = document.getElementById("welcomeText");
-    const roleBadge = document.getElementById("roleBadge");
-    const ticketTableBody = document.getElementById("ticketTableBody");
-    const tableWrap = document.getElementById("tableWrap");
+    const fillAdminBtn = document.getElementById("fillAdminBtn");
+    const createPanel = document.getElementById("createPanel");
+    const ticketList = document.getElementById("ticketList");
+    const detailPanel = document.getElementById("detailPanel");
     const emptyState = document.getElementById("emptyState");
-    const ticketFormPanel = document.getElementById("ticketFormPanel");
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const priorityFilter = document.getElementById("priorityFilter");
+    const clearFilterBtn = document.getElementById("clearFilterBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const toast = document.getElementById("toast");
 
-    let currentUser = JSON.parse(localStorage.getItem("helpdeskUser")) || null;
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function showToast(message, type = "success") {
+      toast.textContent = message;
+      toast.className = `toast show ${type === "error" ? "error" : ""}`;
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => {
+        toast.className = "toast";
+      }, 2800);
+    }
 
     function showMessage(elementId, text, type = "success") {
       const element = document.getElementById(elementId);
@@ -553,17 +1169,31 @@
       element.className = "message";
     }
 
+    function setAuthTab(tab) {
+      const loginActive = tab === "login";
+      loginTab.classList.toggle("active", loginActive);
+      registerTab.classList.toggle("active", !loginActive);
+      loginPane.classList.toggle("hidden", !loginActive);
+      registerPane.classList.toggle("hidden", loginActive);
+    }
+
     function authHeaders() {
       return {
         "Content-Type": "application/json",
-        "X-User-Id": String(currentUser.id),
-        "X-User-Role": currentUser.role,
+        "X-User-Id": String(state.user.id),
+        "X-User-Role": state.user.role,
       };
     }
 
     async function requestJson(url, options = {}) {
       const response = await fetch(url, options);
-      const data = await response.json();
+      let data = null;
+
+      try {
+        data = await response.json();
+      } catch {
+        data = { success: false, message: "Invalid server response" };
+      }
 
       if (!response.ok || data.success === false) {
         throw new Error(data.message || "Request failed");
@@ -573,120 +1203,270 @@
     }
 
     function saveSession(user, token) {
-      currentUser = { ...user, token };
-      localStorage.setItem("helpdeskUser", JSON.stringify(currentUser));
+      state.user = { ...user, token };
+      localStorage.setItem(storageKey, JSON.stringify(state.user));
     }
 
     function clearSession() {
-      currentUser = null;
-      localStorage.removeItem("helpdeskUser");
+      state.user = null;
+      state.tickets = [];
+      state.selectedTicket = null;
+      state.comments = [];
+      localStorage.removeItem(storageKey);
     }
 
     function formatDate(value) {
       if (!value) return "-";
-      return new Date(value).toLocaleString("id-ID", {
-        dateStyle: "medium",
-        timeStyle: "short",
+      const normalized = String(value).includes("T")
+        ? value
+        : `${String(value).replace(" ", "T")}Z`;
+      const date = new Date(normalized);
+
+      if (Number.isNaN(date.getTime())) return value;
+
+      return date.toLocaleString("id-ID", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       });
     }
 
-    function renderApp() {
-      if (!currentUser) {
-        authSection.classList.add("active");
-        dashboard.classList.remove("active");
+    function getInitials(name) {
+      return String(name || "U")
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0])
+        .join("")
+        .toUpperCase();
+    }
+
+    function getStats(tickets) {
+      return {
+        total: tickets.length,
+        open: tickets.filter((ticket) => ticket.status === "open").length,
+        process: tickets.filter((ticket) => ticket.status === "process").length,
+        done: tickets.filter((ticket) => ticket.status === "done").length,
+      };
+    }
+
+    function filteredTickets() {
+      const term = state.filters.search.trim().toLowerCase();
+
+      return state.tickets.filter((ticket) => {
+        const matchesStatus =
+          state.filters.status === "all" || ticket.status === state.filters.status;
+        const matchesPriority =
+          state.filters.priority === "all" || ticket.priority === state.filters.priority;
+        const haystack = [
+          ticket.id,
+          ticket.title,
+          ticket.category,
+          ticket.description,
+          ticket.user_name,
+          ticket.user_email,
+        ]
+          .join(" ")
+          .toLowerCase();
+        const matchesSearch = !term || haystack.includes(term);
+
+        return matchesStatus && matchesPriority && matchesSearch;
+      });
+    }
+
+    function renderLayout() {
+      if (!state.user) {
+        authView.classList.remove("hidden");
+        appView.classList.add("hidden");
         return;
       }
 
-      authSection.classList.remove("active");
-      dashboard.classList.add("active");
-      welcomeText.textContent = `Halo, ${currentUser.name}`;
-      roleBadge.textContent = currentUser.role;
-      roleBadge.className = `badge role-${currentUser.role}`;
-      ticketFormPanel.classList.toggle("hidden", currentUser.role === "admin");
-      loadTickets();
+      authView.classList.add("hidden");
+      appView.classList.remove("hidden");
+
+      const isAdmin = state.user.role === "admin";
+      document.getElementById("dashboardTitle").textContent = isAdmin
+        ? "Admin Command Center"
+        : "Dashboard User";
+      document.getElementById("dashboardSubtitle").textContent = isAdmin
+        ? "Pantau semua ticket dan update progres penanganan."
+        : "Buat dan pantau ticket helpdesk kamu.";
+      document.getElementById("sideUserName").textContent = state.user.name;
+      document.getElementById("topUserName").textContent = state.user.name;
+      document.getElementById("topUserEmail").textContent = state.user.email;
+      document.getElementById("userAvatar").textContent = getInitials(state.user.name);
+      const roleBadge = document.getElementById("sideRoleBadge");
+      roleBadge.textContent = state.user.role;
+      roleBadge.className = `badge role-${state.user.role}`;
+      createPanel.classList.toggle("hidden", isAdmin);
     }
 
-    function renderTickets(tickets) {
-      ticketTableBody.innerHTML = "";
+    function renderStats() {
+      const stats = getStats(state.tickets);
+      document.getElementById("statTotal").textContent = stats.total;
+      document.getElementById("statOpen").textContent = stats.open;
+      document.getElementById("statProcess").textContent = stats.process;
+      document.getElementById("statDone").textContent = stats.done;
+    }
+
+    function renderTickets() {
+      const tickets = filteredTickets();
+      ticketList.innerHTML = "";
       emptyState.classList.toggle("hidden", tickets.length > 0);
-      tableWrap.classList.toggle("hidden", tickets.length === 0);
+      document.getElementById("ticketCountText").textContent = `${tickets.length} ticket`;
 
       tickets.forEach((ticket) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>#${ticket.id}</td>
-          <td>
-            <div class="ticket-title"></div>
-            <div class="ticket-desc"></div>
-          </td>
-          <td>
-            <strong></strong><br>
-            <small></small>
-          </td>
-          <td></td>
-          <td><span class="badge priority-${ticket.priority}">${ticket.priority}</span></td>
-          <td><span class="badge status-${ticket.status}">${ticket.status}</span></td>
-          <td>${formatDate(ticket.created_at)}</td>
-          <td></td>
+        const active = state.selectedTicket && Number(state.selectedTicket.id) === Number(ticket.id);
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = `ticket-card ${active ? "active" : ""}`;
+        item.dataset.ticketId = ticket.id;
+        item.innerHTML = `
+          <div class="ticket-inner">
+            <div class="ticket-line">
+              <div>
+                <h3 class="ticket-title">#${ticket.id} ${escapeHtml(ticket.title)}</h3>
+                <p class="ticket-desc">${escapeHtml(ticket.description)}</p>
+              </div>
+              <span class="badge status-${ticket.status}">${statusLabels[ticket.status] || ticket.status}</span>
+            </div>
+            <div class="meta-row">
+              <span class="badge priority-${ticket.priority}">${priorityLabels[ticket.priority] || ticket.priority}</span>
+              <span>${escapeHtml(ticket.category)}</span>
+              <span>${escapeHtml(ticket.user_name || "-")}</span>
+              <span>${formatDate(ticket.created_at)}</span>
+            </div>
+          </div>
         `;
-
-        row.children[1].querySelector(".ticket-title").textContent = ticket.title;
-        row.children[1].querySelector(".ticket-desc").textContent = ticket.description;
-        row.children[2].querySelector("strong").textContent = ticket.user_name || "-";
-        row.children[2].querySelector("small").textContent = ticket.user_email || "";
-        row.children[3].textContent = ticket.category;
-        row.children[7].appendChild(createActions(ticket));
-        ticketTableBody.appendChild(row);
+        ticketList.appendChild(item);
       });
     }
 
-    function createActions(ticket) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "table-actions";
-
-      if (currentUser.role === "admin") {
-        const statusSelect = document.createElement("select");
-        statusSelect.className = "inline-select";
-        ["open", "process", "done"].forEach((status) => {
-          const option = document.createElement("option");
-          option.value = status;
-          option.textContent = status;
-          option.selected = ticket.status === status;
-          statusSelect.appendChild(option);
-        });
-
-        const prioritySelect = document.createElement("select");
-        prioritySelect.className = "inline-select";
-        ["low", "medium", "high"].forEach((priority) => {
-          const option = document.createElement("option");
-          option.value = priority;
-          option.textContent = priority;
-          option.selected = ticket.priority === priority;
-          prioritySelect.appendChild(option);
-        });
-
-        const updateBtn = document.createElement("button");
-        updateBtn.className = "btn small";
-        updateBtn.type = "button";
-        updateBtn.textContent = "Update";
-        updateBtn.addEventListener("click", () => {
-          updateTicket(ticket.id, statusSelect.value, prioritySelect.value);
-        });
-
-        wrapper.append(statusSelect, prioritySelect, updateBtn);
+    function renderComments() {
+      if (!state.comments.length) {
+        return '<div class="empty-state">Belum ada komentar.</div>';
       }
 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.className = "btn small danger";
-      deleteBtn.type = "button";
-      deleteBtn.textContent = "Hapus";
-      deleteBtn.addEventListener("click", () => deleteTicket(ticket.id));
-      wrapper.appendChild(deleteBtn);
-
-      return wrapper;
+      return `
+        <div class="comments">
+          ${state.comments
+            .map((comment) => {
+              const mine = Number(comment.user_id) === Number(state.user.id);
+              return `
+                <div class="comment ${mine ? "mine" : ""}">
+                  <div class="comment-head">
+                    <span>${mine ? "Anda" : escapeHtml(comment.user_name)} - ${escapeHtml(comment.user_role)}</span>
+                    <span>${formatDate(comment.created_at)}</span>
+                  </div>
+                  <p>${escapeHtml(comment.message)}</p>
+                </div>
+              `;
+            })
+            .join("")}
+        </div>
+      `;
     }
 
-    async function loadTickets() {
+    function renderDetail() {
+      const ticket = state.selectedTicket;
+
+      if (!ticket) {
+        detailPanel.innerHTML = '<div class="empty-state">Pilih ticket untuk melihat detail.</div>';
+        return;
+      }
+
+      const isAdmin = state.user.role === "admin";
+      detailPanel.innerHTML = `
+        <div class="panel-header">
+          <div>
+            <h3>Ticket #${ticket.id}</h3>
+            <p>${formatDate(ticket.created_at)}</p>
+          </div>
+          <span class="badge status-${ticket.status}">${statusLabels[ticket.status] || ticket.status}</span>
+        </div>
+
+        <div class="detail-body">
+          <div>
+            <h2 class="detail-title">${escapeHtml(ticket.title)}</h2>
+            <p class="detail-desc">${escapeHtml(ticket.description)}</p>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-box">
+              <span>Pemilik</span>
+              <strong>${escapeHtml(ticket.user_name || "-")}</strong>
+              <small>${escapeHtml(ticket.user_email || "")}</small>
+            </div>
+            <div class="info-box">
+              <span>Kategori</span>
+              <strong>${escapeHtml(ticket.category)}</strong>
+            </div>
+            <div class="info-box">
+              <span>Prioritas</span>
+              <strong>${priorityLabels[ticket.priority] || ticket.priority}</strong>
+            </div>
+            <div class="info-box">
+              <span>Status</span>
+              <strong>${statusLabels[ticket.status] || ticket.status}</strong>
+            </div>
+          </div>
+
+          ${isAdmin ? renderAdminForm(ticket) : ""}
+
+          <div>
+            <div class="panel-header">
+              <div>
+                <h3>Diskusi</h3>
+                <p>${state.comments.length} komentar</p>
+              </div>
+            </div>
+            ${renderComments()}
+          </div>
+
+          <form id="commentForm" class="comment-form">
+            <textarea id="commentMessage" placeholder="Tulis komentar" required></textarea>
+            <button class="btn" type="submit">Kirim Komentar</button>
+          </form>
+
+          <button id="deleteTicketBtn" class="btn danger" type="button">Hapus Ticket</button>
+        </div>
+      `;
+    }
+
+    function renderAdminForm(ticket) {
+      return `
+        <form id="adminUpdateForm" class="admin-form">
+          <div class="field">
+            <label for="adminStatus">Status</label>
+            <select id="adminStatus">
+              <option value="open" ${ticket.status === "open" ? "selected" : ""}>Open</option>
+              <option value="process" ${ticket.status === "process" ? "selected" : ""}>Process</option>
+              <option value="done" ${ticket.status === "done" ? "selected" : ""}>Done</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="adminPriority">Prioritas</label>
+            <select id="adminPriority">
+              <option value="low" ${ticket.priority === "low" ? "selected" : ""}>Low</option>
+              <option value="medium" ${ticket.priority === "medium" ? "selected" : ""}>Medium</option>
+              <option value="high" ${ticket.priority === "high" ? "selected" : ""}>High</option>
+            </select>
+          </div>
+          <button class="btn" type="submit">Update Ticket</button>
+        </form>
+      `;
+    }
+
+    function renderDashboard() {
+      renderLayout();
+      renderStats();
+      renderTickets();
+      renderDetail();
+    }
+
+    async function loadTickets({ keepSelection = true } = {}) {
       clearMessage("tableMessage");
 
       try {
@@ -694,61 +1474,120 @@
           method: "GET",
           headers: authHeaders(),
         });
-        renderTickets(data.tickets || []);
+        state.tickets = data.tickets || [];
+
+        if (!keepSelection || !state.selectedTicket) {
+          state.selectedTicket = state.tickets[0] || null;
+        } else {
+          const selected = state.tickets.find(
+            (ticket) => Number(ticket.id) === Number(state.selectedTicket.id),
+          );
+          state.selectedTicket = selected || state.tickets[0] || null;
+        }
+
+        if (state.selectedTicket) {
+          await loadTicketDetail(state.selectedTicket.id, false);
+        } else {
+          state.comments = [];
+        }
+
+        renderDashboard();
       } catch (error) {
         showMessage("tableMessage", error.message, "error");
       }
     }
 
-    async function updateTicket(id, status, priority) {
-      try {
-        await requestJson(`/api/tickets?id=${id}`, {
-          method: "PUT",
-          headers: authHeaders(),
-          body: JSON.stringify({ status, priority }),
-        });
-        showMessage("tableMessage", "Ticket berhasil diupdate.", "success");
-        loadTickets();
-      } catch (error) {
-        showMessage("tableMessage", error.message, "error");
+    async function loadTicketDetail(ticketId, rerender = true) {
+      const data = await requestJson(`/api/tickets?id=${ticketId}`, {
+        method: "GET",
+        headers: authHeaders(),
+      });
+      state.selectedTicket = data.ticket;
+      state.comments = data.comments || [];
+
+      if (rerender) {
+        renderDashboard();
       }
     }
 
-    async function deleteTicket(id) {
-      const confirmed = confirm("Hapus ticket ini?");
-      if (!confirmed) return;
-
-      try {
-        await requestJson(`/api/tickets?id=${id}`, {
-          method: "DELETE",
-          headers: authHeaders(),
-        });
-        showMessage("tableMessage", "Ticket berhasil dihapus.", "success");
-        loadTickets();
-      } catch (error) {
-        showMessage("tableMessage", error.message, "error");
-      }
+    async function createTicket(payload) {
+      await requestJson("/api/tickets", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify(payload),
+      });
+      await loadTickets({ keepSelection: false });
     }
+
+    async function updateTicket(ticketId, payload) {
+      await requestJson(`/api/tickets?id=${ticketId}`, {
+        method: "PUT",
+        headers: authHeaders(),
+        body: JSON.stringify(payload),
+      });
+      await loadTickets({ keepSelection: true });
+    }
+
+    async function deleteTicket(ticketId) {
+      await requestJson(`/api/tickets?id=${ticketId}`, {
+        method: "DELETE",
+        headers: authHeaders(),
+      });
+      state.selectedTicket = null;
+      await loadTickets({ keepSelection: false });
+    }
+
+    async function addComment(ticketId, message) {
+      const data = await requestJson(`/api/tickets?id=${ticketId}`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ message }),
+      });
+      state.comments = data.comments || [];
+      renderDashboard();
+    }
+
+    async function login(payload) {
+      const data = await requestJson("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      saveSession(data.user, data.token);
+      await loadTickets({ keepSelection: false });
+      renderDashboard();
+    }
+
+    async function register(payload) {
+      const data = await requestJson("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      saveSession(data.user, data.token);
+      await loadTickets({ keepSelection: false });
+      renderDashboard();
+    }
+
+    loginTab.addEventListener("click", () => setAuthTab("login"));
+    registerTab.addEventListener("click", () => setAuthTab("register"));
+
+    fillAdminBtn.addEventListener("click", () => {
+      document.getElementById("loginEmail").value = "admin@mail.com";
+      document.getElementById("loginPassword").value = "admin123";
+    });
 
     loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       clearMessage("loginMessage");
 
-      const payload = {
-        email: document.getElementById("loginEmail").value,
-        password: document.getElementById("loginPassword").value,
-      };
-
       try {
-        const data = await requestJson("/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+        await login({
+          email: document.getElementById("loginEmail").value,
+          password: document.getElementById("loginPassword").value,
         });
-
-        saveSession(data.user, data.token);
         loginForm.reset();
-        renderApp();
+        showToast("Login berhasil");
       } catch (error) {
         showMessage("loginMessage", error.message, "error");
       }
@@ -758,22 +1597,14 @@
       event.preventDefault();
       clearMessage("registerMessage");
 
-      const payload = {
-        name: document.getElementById("registerName").value,
-        email: document.getElementById("registerEmail").value,
-        password: document.getElementById("registerPassword").value,
-      };
-
       try {
-        await requestJson("/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+        await register({
+          name: document.getElementById("registerName").value,
+          email: document.getElementById("registerEmail").value,
+          password: document.getElementById("registerPassword").value,
         });
-
         registerForm.reset();
-        document.getElementById("loginEmail").value = payload.email;
-        showMessage("registerMessage", "Register berhasil. Silakan login.", "success");
+        showToast("Register berhasil");
       } catch (error) {
         showMessage("registerMessage", error.message, "error");
       }
@@ -783,35 +1614,132 @@
       event.preventDefault();
       clearMessage("ticketMessage");
 
-      const payload = {
-        title: document.getElementById("ticketTitle").value,
-        category: document.getElementById("ticketCategory").value,
-        description: document.getElementById("ticketDescription").value,
-        priority: document.getElementById("ticketPriority").value,
-      };
-
       try {
-        await requestJson("/api/tickets", {
-          method: "POST",
-          headers: authHeaders(),
-          body: JSON.stringify(payload),
+        await createTicket({
+          title: document.getElementById("ticketTitle").value,
+          category: document.getElementById("ticketCategory").value,
+          description: document.getElementById("ticketDescription").value,
+          priority: document.getElementById("ticketPriority").value,
         });
-
         ticketForm.reset();
         document.getElementById("ticketPriority").value = "medium";
         showMessage("ticketMessage", "Ticket berhasil dibuat.", "success");
-        loadTickets();
       } catch (error) {
         showMessage("ticketMessage", error.message, "error");
       }
     });
 
-    logoutBtn.addEventListener("click", () => {
-      clearSession();
-      renderApp();
+    ticketList.addEventListener("click", async (event) => {
+      const card = event.target.closest(".ticket-card");
+      if (!card) return;
+
+      try {
+        await loadTicketDetail(card.dataset.ticketId);
+      } catch (error) {
+        showToast(error.message, "error");
+      }
     });
 
-    renderApp();
+    detailPanel.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!state.selectedTicket) return;
+
+      if (event.target.id === "adminUpdateForm") {
+        try {
+          await updateTicket(state.selectedTicket.id, {
+            status: document.getElementById("adminStatus").value,
+            priority: document.getElementById("adminPriority").value,
+          });
+          showToast("Ticket berhasil diupdate");
+        } catch (error) {
+          showToast(error.message, "error");
+        }
+      }
+
+      if (event.target.id === "commentForm") {
+        const input = document.getElementById("commentMessage");
+
+        try {
+          await addComment(state.selectedTicket.id, input.value);
+          input.value = "";
+          showToast("Komentar terkirim");
+        } catch (error) {
+          showToast(error.message, "error");
+        }
+      }
+    });
+
+    detailPanel.addEventListener("click", async (event) => {
+      if (event.target.id !== "deleteTicketBtn" || !state.selectedTicket) return;
+
+      const confirmed = confirm("Hapus ticket ini?");
+      if (!confirmed) return;
+
+      try {
+        await deleteTicket(state.selectedTicket.id);
+        showToast("Ticket berhasil dihapus");
+      } catch (error) {
+        showToast(error.message, "error");
+      }
+    });
+
+    document.querySelector(".side-nav").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-filter-status]");
+      if (!button) return;
+
+      document.querySelectorAll(".side-nav button").forEach((item) => {
+        item.classList.toggle("active", item === button);
+      });
+      state.filters.status = button.dataset.filterStatus;
+      statusFilter.value = state.filters.status;
+      renderDashboard();
+    });
+
+    searchInput.addEventListener("input", (event) => {
+      state.filters.search = event.target.value;
+      renderDashboard();
+    });
+
+    statusFilter.addEventListener("change", (event) => {
+      state.filters.status = event.target.value;
+      document.querySelectorAll(".side-nav button").forEach((item) => {
+        item.classList.toggle("active", item.dataset.filterStatus === state.filters.status);
+      });
+      renderDashboard();
+    });
+
+    priorityFilter.addEventListener("change", (event) => {
+      state.filters.priority = event.target.value;
+      renderDashboard();
+    });
+
+    clearFilterBtn.addEventListener("click", () => {
+      state.filters = { search: "", status: "all", priority: "all" };
+      searchInput.value = "";
+      statusFilter.value = "all";
+      priorityFilter.value = "all";
+      document.querySelectorAll(".side-nav button").forEach((item) => {
+        item.classList.toggle("active", item.dataset.filterStatus === "all");
+      });
+      renderDashboard();
+    });
+
+    refreshBtn.addEventListener("click", () => {
+      loadTickets({ keepSelection: true }).then(() => showToast("Data diperbarui"));
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      clearSession();
+      renderLayout();
+      showToast("Logout berhasil");
+    });
+
+    renderLayout();
+
+    if (state.user) {
+      loadTickets({ keepSelection: false });
+    }
   </script>
 </body>
 </html>

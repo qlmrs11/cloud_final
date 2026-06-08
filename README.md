@@ -40,6 +40,8 @@ kelompok-4-helpdesk-cloudflare/
 - Admin bisa melihat semua ticket
 - Admin bisa update status dan prioritas ticket
 - User dan admin bisa hapus ticket
+- User dan admin bisa menambahkan komentar pada detail ticket
+- Dashboard memiliki statistik, search, filter status, filter prioritas, dan panel detail
 - Data tersimpan di Cloudflare D1
 
 ## Install
@@ -103,6 +105,16 @@ npm run deploy
 ```
 
 Pastikan binding D1 bernama `DB` sudah terhubung ke project Cloudflare Pages.
+
+Jika deploy memakai integrasi GitHub di Cloudflare Pages, gunakan pengaturan berikut:
+
+```text
+Build command: kosongkan atau echo "No build needed"
+Build output directory: public
+Root directory: /
+```
+
+Jangan memakai `npx wrangler pages deploy public` sebagai build command di dashboard Cloudflare Pages. Command tersebut hanya untuk deploy manual dari terminal.
 
 ## Akun Admin Demo
 

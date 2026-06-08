@@ -14,13 +14,30 @@ function jsonResponse(data, status = 200) {
   });
 }
 
+async function readJson(request) {
+  try {
+    return await request.json();
+  } catch {
+    return null;
+  }
+}
+
+function normalizeEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
 async function handlePost(context) {
   try {
     const { request, env } = context;
-    const body = await request.json();
-    const name = body.name?.trim();
-    const email = body.email?.trim().toLowerCase();
-    const password = body.password?.trim();
+    const body = await readJson(request);
+
+    if (!body) {
+      return jsonResponse({ success: false, message: "Invalid JSON body" }, 400);
+    }
+
+    const name = String(body.name || "").trim();
+    const email = normalizeEmail(body.email);
+    const password = String(body.password || "").trim();
 
     if (!name || !email || !password) {
       return jsonResponse(
@@ -42,19 +59,32 @@ async function handlePost(context) {
       );
     }
 
-    await env.DB.prepare(
+    const result = await env.DB.prepare(
       "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'user')",
     )
       .bind(name, email, password)
       .run();
 
+    const user = {
+      id: result.meta.last_row_id,
+      name,
+      email,
+      role: "user",
+    };
+
     return jsonResponse({
       success: true,
-      message: "Registration successful. Please login.",
+      message: "Registration successful",
+      user,
+      token: `${user.id}-${user.role}`,
     });
   } catch (error) {
     return jsonResponse(
-      { success: false, message: "Failed to register user", error: error.message },
+      {
+        success: false,
+        message: "Failed to register user",
+        error: error.message,
+      },
       500,
     );
   }

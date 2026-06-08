@@ -14,12 +14,29 @@ function jsonResponse(data, status = 200) {
   });
 }
 
+async function readJson(request) {
+  try {
+    return await request.json();
+  } catch {
+    return null;
+  }
+}
+
+function normalizeEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
 async function handlePost(context) {
   try {
     const { request, env } = context;
-    const body = await request.json();
-    const email = body.email?.trim().toLowerCase();
-    const password = body.password?.trim();
+    const body = await readJson(request);
+
+    if (!body) {
+      return jsonResponse({ success: false, message: "Invalid JSON body" }, 400);
+    }
+
+    const email = normalizeEmail(body.email);
+    const password = String(body.password || "").trim();
 
     if (!email || !password) {
       return jsonResponse(
