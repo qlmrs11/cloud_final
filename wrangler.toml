@@ -5,4 +5,4 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "kelompok4_helpdesk_db"
-database_id = "REPLACE_WITH_YOUR_DATABASE_ID"
+database_id = "ed769aba-97fc-49ed-aeac-6225792f209d"
