@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelompok 4 Helpdesk App</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-soft: #eef4ff;
+      --text: #172033;
+      --muted: #667085;
+      --line: #d9e2ef;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #16803f;
+      --warning: #b45309;
+      --danger: #dc2626;
+      --radius: 8px;
+      --shadow: 0 18px 45px rgba(23, 32, 51, 0.11);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.08), transparent 35%),
+        linear-gradient(315deg, rgba(22, 128, 63, 0.08), transparent 30%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    .app-shell {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 0 28px;
+    }
+
+    .brand h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(217, 226, 239, 0.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .auth-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      align-items: start;
+    }
+
+    .auth-card,
+    .panel {
+      padding: 22px;
+    }
+
+    .auth-card h2,
+    .panel h2,
+    .panel h3 {
+      margin: 0 0 16px;
+      font-size: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .ticket-form {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: #344054;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 104px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+
+    .btn {
+      min-height: 42px;
+      padding: 10px 14px;
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn.secondary {
+      background: #e7edf8;
+      color: #22314d;
+    }
+
+    .btn.secondary:hover {
+      background: #d9e4f5;
+    }
+
+    .btn.danger {
+      background: var(--danger);
+    }
+
+    .btn.danger:hover {
+      background: #b91c1c;
+    }
+
+    .btn.small {
+      min-height: 34px;
+      padding: 7px 10px;
+      font-size: 13px;
+    }
+
+    .message {
+      display: none;
+      margin: 0 0 16px;
+      border-radius: 6px;
+      padding: 11px 12px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.success {
+      color: #14532d;
+      background: #dcfce7;
+      border: 1px solid #bbf7d0;
+    }
+
+    .message.error {
+      color: #7f1d1d;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+    }
+
+    .dashboard {
+      display: none;
+      gap: 20px;
+    }
+
+    .dashboard.active,
+    .auth-section.active {
+      display: grid;
+    }
+
+    .auth-section {
+      display: none;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 20px;
+    }
+
+    .user-info {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-info strong {
+      font-size: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge.role-admin {
+      color: #7c2d12;
+      background: #ffedd5;
+    }
+
+    .badge.role-user {
+      color: #1e3a8a;
+      background: #dbeafe;
+    }
+
+    .badge.status-open {
+      color: #1e3a8a;
+      background: #dbeafe;
+    }
+
+    .badge.status-process {
+      color: #7c2d12;
+      background: #ffedd5;
+    }
+
+    .badge.status-done {
+      color: #14532d;
+      background: #dcfce7;
+    }
+
+    .badge.priority-low {
+      color: #14532d;
+      background: #dcfce7;
+    }
+
+    .badge.priority-medium {
+      color: #713f12;
+      background: #fef3c7;
+    }
+
+    .badge.priority-high {
+      color: #7f1d1d;
+      background: #fee2e2;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface-soft);
+      color: #344054;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .ticket-title {
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .ticket-desc {
+      color: var(--muted);
+      max-width: 320px;
+      line-height: 1.45;
+    }
+
+    .table-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 220px;
+    }
+
+    .inline-select {
+      width: auto;
+      min-width: 102px;
+      padding: 7px 9px;
+      font-size: 13px;
+    }
+
+    .empty-state {
+      padding: 26px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 760px) {
+      .app-shell {
+        width: min(100% - 20px, 1160px);
+        padding-top: 18px;
+      }
+
+      .topbar,
+      .dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .auth-grid,
+      .ticket-form {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-card,
+      .panel {
+        padding: 18px;
+      }
+
+      .brand h1 {
+        font-size: 30px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .table-actions .btn {
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <h1>Kelompok 4 Helpdesk App</h1>
+        <p>Cloudflare Pages + Functions + D1</p>
+      </div>
+    </header>
+
+    <section id="authSection" class="auth-section active">
+      <div class="auth-grid">
+        <article class="card auth-card">
+          <h2>Login</h2>
+          <p id="loginMessage" class="message"></p>
+          <form id="loginForm" class="form-grid">
+            <div class="field">
+              <label for="loginEmail">Email</label>
+              <input id="loginEmail" type="email" autocomplete="email" placeholder="admin@mail.com" required>
+            </div>
+            <div class="field">
+              <label for="loginPassword">Password</label>
+              <input id="loginPassword" type="password" autocomplete="current-password" placeholder="admin123" required>
+            </div>
+            <button class="btn" type="submit">Login</button>
+          </form>
+        </article>
+
+        <article class="card auth-card">
+          <h2>Register User</h2>
+          <p id="registerMessage" class="message"></p>
+          <form id="registerForm" class="form-grid">
+            <div class="field">
+              <label for="registerName">Nama</label>
+              <input id="registerName" type="text" autocomplete="name" placeholder="Nama lengkap" required>
+            </div>
+            <div class="field">
+              <label for="registerEmail">Email</label>
+              <input id="registerEmail" type="email" autocomplete="email" placeholder="user@mail.com" required>
+            </div>
+            <div class="field">
+              <label for="registerPassword">Password</label>
+              <input id="registerPassword" type="password" autocomplete="new-password" placeholder="Minimal 1 karakter" required>
+            </div>
+            <button class="btn secondary" type="submit">Register</button>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section id="dashboard" class="dashboard">
+      <div class="card dashboard-header">
+        <div class="user-info">
+          <strong id="welcomeText">Halo</strong>
+          <span id="roleBadge" class="badge">USER</span>
+        </div>
+        <button id="logoutBtn" class="btn secondary" type="button">Logout</button>
+      </div>
+
+      <article id="ticketFormPanel" class="card panel">
+        <h2>Buat Ticket Baru</h2>
+        <p id="ticketMessage" class="message"></p>
+        <form id="ticketForm" class="form-grid ticket-form">
+          <div class="field">
+            <label for="ticketTitle">Judul</label>
+            <input id="ticketTitle" type="text" placeholder="Contoh: Website tidak bisa dibuka" required>
+          </div>
+          <div class="field">
+            <label for="ticketCategory">Kategori</label>
+            <input id="ticketCategory" type="text" placeholder="Network, Server, Akun, Aplikasi" required>
+          </div>
+          <div class="field">
+            <label for="ticketPriority">Prioritas</label>
+            <select id="ticketPriority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="ticketDescription">Deskripsi</label>
+            <textarea id="ticketDescription" placeholder="Tulis keluhan atau detail masalah" required></textarea>
+          </div>
+          <div class="field full">
+            <button class="btn" type="submit">Tambah Ticket</button>
+          </div>
+        </form>
+      </article>
+
+      <article class="card panel">
+        <h2>Daftar Ticket</h2>
+        <p id="tableMessage" class="message"></p>
+        <div id="emptyState" class="empty-state hidden">Belum ada ticket.</div>
+        <div id="tableWrap" class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Ticket</th>
+                <th>Pemilik</th>
+                <th>Kategori</th>
+                <th>Prioritas</th>
+                <th>Status</th>
+                <th>Dibuat</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="ticketTableBody"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const authSection = document.getElementById("authSection");
+    const dashboard = document.getElementById("dashboard");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const ticketForm = document.getElementById("ticketForm");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const welcomeText = document.getElementById("welcomeText");
+    const roleBadge = document.getElementById("roleBadge");
+    const ticketTableBody = document.getElementById("ticketTableBody");
+    const tableWrap = document.getElementById("tableWrap");
+    const emptyState = document.getElementById("emptyState");
+    const ticketFormPanel = document.getElementById("ticketFormPanel");
+
+    let currentUser = JSON.parse(localStorage.getItem("helpdeskUser")) || null;
+
+    function showMessage(elementId, text, type = "success") {
+      const element = document.getElementById(elementId);
+      element.textContent = text;
+      element.className = `message show ${type}`;
+    }
+
+    function clearMessage(elementId) {
+      const element = document.getElementById(elementId);
+      element.textContent = "";
+      element.className = "message";
+    }
+
+    function authHeaders() {
+      return {
+        "Content-Type": "application/json",
+        "X-User-Id": String(currentUser.id),
+        "X-User-Role": currentUser.role,
+      };
+    }
+
+    async function requestJson(url, options = {}) {
+      const response = await fetch(url, options);
+      const data = await response.json();
+
+      if (!response.ok || data.success === false) {
+        throw new Error(data.message || "Request failed");
+      }
+
+      return data;
+    }
+
+    function saveSession(user, token) {
+      currentUser = { ...user, token };
+      localStorage.setItem("helpdeskUser", JSON.stringify(currentUser));
+    }
+
+    function clearSession() {
+      currentUser = null;
+      localStorage.removeItem("helpdeskUser");
+    }
+
+    function formatDate(value) {
+      if (!value) return "-";
+      return new Date(value).toLocaleString("id-ID", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      });
+    }
+
+    function renderApp() {
+      if (!currentUser) {
+        authSection.classList.add("active");
+        dashboard.classList.remove("active");
+        return;
+      }
+
+      authSection.classList.remove("active");
+      dashboard.classList.add("active");
+      welcomeText.textContent = `Halo, ${currentUser.name}`;
+      roleBadge.textContent = currentUser.role;
+      roleBadge.className = `badge role-${currentUser.role}`;
+      ticketFormPanel.classList.toggle("hidden", currentUser.role === "admin");
+      loadTickets();
+    }
+
+    function renderTickets(tickets) {
+      ticketTableBody.innerHTML = "";
+      emptyState.classList.toggle("hidden", tickets.length > 0);
+      tableWrap.classList.toggle("hidden", tickets.length === 0);
+
+      tickets.forEach((ticket) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>#${ticket.id}</td>
+          <td>
+            <div class="ticket-title"></div>
+            <div class="ticket-desc"></div>
+          </td>
+          <td>
+            <strong></strong><br>
+            <small></small>
+          </td>
+          <td></td>
+          <td><span class="badge priority-${ticket.priority}">${ticket.priority}</span></td>
+          <td><span class="badge status-${ticket.status}">${ticket.status}</span></td>
+          <td>${formatDate(ticket.created_at)}</td>
+          <td></td>
+        `;
+
+        row.children[1].querySelector(".ticket-title").textContent = ticket.title;
+        row.children[1].querySelector(".ticket-desc").textContent = ticket.description;
+        row.children[2].querySelector("strong").textContent = ticket.user_name || "-";
+        row.children[2].querySelector("small").textContent = ticket.user_email || "";
+        row.children[3].textContent = ticket.category;
+        row.children[7].appendChild(createActions(ticket));
+        ticketTableBody.appendChild(row);
+      });
+    }
+
+    function createActions(ticket) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-actions";
+
+      if (currentUser.role === "admin") {
+        const statusSelect = document.createElement("select");
+        statusSelect.className = "inline-select";
+        ["open", "process", "done"].forEach((status) => {
+          const option = document.createElement("option");
+          option.value = status;
+          option.textContent = status;
+          option.selected = ticket.status === status;
+          statusSelect.appendChild(option);
+        });
+
+        const prioritySelect = document.createElement("select");
+        prioritySelect.className = "inline-select";
+        ["low", "medium", "high"].forEach((priority) => {
+          const option = document.createElement("option");
+          option.value = priority;
+          option.textContent = priority;
+          option.selected = ticket.priority === priority;
+          prioritySelect.appendChild(option);
+        });
+
+        const updateBtn = document.createElement("button");
+        updateBtn.className = "btn small";
+        updateBtn.type = "button";
+        updateBtn.textContent = "Update";
+        updateBtn.addEventListener("click", () => {
+          updateTicket(ticket.id, statusSelect.value, prioritySelect.value);
+        });
+
+        wrapper.append(statusSelect, prioritySelect, updateBtn);
+      }
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "btn small danger";
+      deleteBtn.type = "button";
+      deleteBtn.textContent = "Hapus";
+      deleteBtn.addEventListener("click", () => deleteTicket(ticket.id));
+      wrapper.appendChild(deleteBtn);
+
+      return wrapper;
+    }
+
+    async function loadTickets() {
+      clearMessage("tableMessage");
+
+      try {
+        const data = await requestJson("/api/tickets", {
+          method: "GET",
+          headers: authHeaders(),
+        });
+        renderTickets(data.tickets || []);
+      } catch (error) {
+        showMessage("tableMessage", error.message, "error");
+      }
+    }
+
+    async function updateTicket(id, status, priority) {
+      try {
+        await requestJson(`/api/tickets?id=${id}`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({ status, priority }),
+        });
+        showMessage("tableMessage", "Ticket berhasil diupdate.", "success");
+        loadTickets();
+      } catch (error) {
+        showMessage("tableMessage", error.message, "error");
+      }
+    }
+
+    async function deleteTicket(id) {
+      const confirmed = confirm("Hapus ticket ini?");
+      if (!confirmed) return;
+
+      try {
+        await requestJson(`/api/tickets?id=${id}`, {
+          method: "DELETE",
+          headers: authHeaders(),
+        });
+        showMessage("tableMessage", "Ticket berhasil dihapus.", "success");
+        loadTickets();
+      } catch (error) {
+        showMessage("tableMessage", error.message, "error");
+      }
+    }
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage("loginMessage");
+
+      const payload = {
+        email: document.getElementById("loginEmail").value,
+        password: document.getElementById("loginPassword").value,
+      };
+
+      try {
+        const data = await requestJson("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        saveSession(data.user, data.token);
+        loginForm.reset();
+        renderApp();
+      } catch (error) {
+        showMessage("loginMessage", error.message, "error");
+      }
+    });
+
+    registerForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage("registerMessage");
+
+      const payload = {
+        name: document.getElementById("registerName").value,
+        email: document.getElementById("registerEmail").value,
+        password: document.getElementById("registerPassword").value,
+      };
+
+      try {
+        await requestJson("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        registerForm.reset();
+        document.getElementById("loginEmail").value = payload.email;
+        showMessage("registerMessage", "Register berhasil. Silakan login.", "success");
+      } catch (error) {
+        showMessage("registerMessage", error.message, "error");
+      }
+    });
+
+    ticketForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage("ticketMessage");
+
+      const payload = {
+        title: document.getElementById("ticketTitle").value,
+        category: document.getElementById("ticketCategory").value,
+        description: document.getElementById("ticketDescription").value,
+        priority: document.getElementById("ticketPriority").value,
+      };
+
+      try {
+        await requestJson("/api/tickets", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify(payload),
+        });
+
+        ticketForm.reset();
+        document.getElementById("ticketPriority").value = "medium";
+        showMessage("ticketMessage", "Ticket berhasil dibuat.", "success");
+        loadTickets();
+      } catch (error) {
+        showMessage("ticketMessage", error.message, "error");
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      clearSession();
+      renderApp();
+    });
+
+    renderApp();
+  </script>
+</body>
+</html>

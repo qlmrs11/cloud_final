@@ -1,0 +1,14 @@
+{
+  "name": "kelompok-4-helpdesk-cloudflare",
+  "version": "1.0.0",
+  "description": "Kelompok 4 Helpdesk App menggunakan Cloudflare Pages, Functions, dan D1.",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev public",
+    "dev:d1": "wrangler pages dev public --d1 DB=REPLACE_WITH_YOUR_DATABASE_ID",
+    "deploy": "wrangler pages deploy public"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
